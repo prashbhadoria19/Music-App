@@ -1,7 +1,7 @@
 import React from 'react'
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { Main } from 'C:\Users\dell\MusicApp\Screens';
+import { Main } from './Screens/Main';
 
 export default function App() {
   return (
