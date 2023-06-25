@@ -52,47 +52,67 @@ export function Main({navigation}) {
                     Trending right now...
                 </Text>
                 {/* heading text end */}
-                {/* trending cards start */}
-    <View style={{
+                
+                    {/* trending cards start */}
+                    <View style={{
                         marginTop: 10,
                         marginBottom: 15,
                     }}>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row', gap: 15, height: '100%', padding: 10, }}>
-                    <View style={styles.card}>
-                        <Image source={musicImage} style={styles.cardImg}/>
-                        <TouchableOpacity style={styles.dotIcon}>
-                            <Text style={styles.dotFont}>
-                                ...
-                            </Text>
-                        </TouchableOpacity>
-                        <View style={styles.playBox}>
-                            <View style={styles.playBoxItem}>
-                                <View>
-                                    <Text style={styles.musicName}>
-                                        The Dark Side
-                                    </Text>
-                                    <View style={styles.musicDescBox}>
-                                        <Image source={music} style={styles.musicIcon}/>
-                                        <Text style={styles.musicDesc}>
-                                            Muse - Simulation Theory
-                                        </Text>
-                                        <View style={styles.playIcon}>
-                                            <TouchableOpacity style={styles.playButton}>
-                                                <Image source={play} />
-                                            </TouchableOpacity>
+                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row', gap: 15, height: '100%', padding: 10, }}>
+
+                            <View style={styles.card}>
+                                <Image source={music1} style={styles.cardImg} />
+                                <TouchableOpacity style={styles.dotIcon}>
+                                    <Text style={styles.dotFont}>...</Text>
+                                </TouchableOpacity>
+                                <View style={styles.playBox}>
+                                    <View style={styles.playBoxItem}>
+                                        <View>
+                                            <Text style={styles.musicName}>
+                                                The Dark Side
+                                            </Text>
+                                            <View style={styles.mucisDescBox}>
+                                                <Image source={music} style={styles.musicIcon} />
+                                                <Text style={styles.musicDesc}>
+                                                    Muse - Simulation Theory
+                                                </Text>
+                                            </View>
                                         </View>
+                                        <TouchableOpacity style={styles.playBtn}>
+                                            <Image source={play} style={styles.playIcon} />
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
-                                <View>
+                            </View>
+
+                            <View style={styles.card}>
+                                <Image source={music1} style={styles.cardImg} />
+                                <TouchableOpacity style={styles.dotIcon}>
+                                    <Text style={styles.dotFont}>...</Text>
+                                </TouchableOpacity>
+                                <View style={styles.playBox}>
+                                    <View style={styles.playBoxItem}>
+                                        <View>
+                                            <Text style={styles.musicName}>
+                                                The Dark Side
+                                            </Text>
+                                            <View style={styles.mucisDescBox}>
+                                                <Image source={music} style={styles.musicIcon} />
+                                                <Text style={styles.musicDesc}>
+                                                    Muse - Simulation Theory
+                                                </Text>
+                                            </View>
+                                        </View>
+                                        <TouchableOpacity style={styles.playBtn}>
+                                            <Image source={play} style={styles.playIcon} />
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
-                    </View>
-                </ScrollView>
-</View>
-                </ScrollView>
 
-                {/* trending cards end */}
+                        </ScrollView>
+                    </View>
+                    {/* trending cards end */}
                 {/* <Text style={{fontSize:50,marginLeft:15,color:'#fff',fontWeight:'600',opacity:0.7,bottom:50}}>{number}</Text>
                 {showData &&
                 <Text style={{fontSize:50,marginLeft:15,color:'#fff',fontWeight:'600',opacity:0.7,bottom:80}}>This is hidden</Text>
@@ -158,82 +178,81 @@ const styles = StyleSheet.create({
         color:'#ffff',
         fontWeight:600,
     }, 
-    card:{
-        marginLeft:10,
-        width:'60%',
-        height:160,
+    card: {
+        width: 280,
+        borderRadius: 30,
+        height: 200,
+        elevation: 10,
+        shadowColor: '#fff',
+        shadowRadius: 30,
     },
-    cardImg:{
-        width:'100%',
-        height:'100%',
-        opacity:0.7,
-        borderRadius:20,
-        resizeMode:'contain',
-
+    cardImg: {
+        width: '100%',
+        height: 200,
+        borderRadius: 30,
+        resizeMode: 'contain',
     },
-    dotIcon:{
-        position:'absolute',
-        right:20,
-        top:-5,
+    dotIcon: {
+        position: 'absolute',
+        right: 30,
     },
-    dotFont:{
-        color:'#ffff',
-        fontSize:29,
-        fontWeight:'600',
+    dotFont: {
+        color: '#fff',
+        fontSize: 29,
+        fontWeight: '600',
     },
-    playBox:{
-        flexDirection:'row',
-        marginLeft:15,
-        backgroundColor: 'blue',
-        position:'absolute',
-        zIndex:999,
-        padding:5,
-        width:'85%',
-        bottom:20,
-        borderRadius:15,
+    playBox: {
+        position: 'absolute',
+        zIndex: 999,
+        bottom: 0,
+        padding: 20,
+        width: '100%',
+        borderRadius: 30,
     },
-    playBoxItem:{
-        height:60,
-        width:'100%',
-        padding:10,
+    playBoxItem: {
+        backgroundColor: 'rgba(42, 82, 190, 0.9)',
+        height: 60,
+        width: '100%',
+        padding: 10,
         borderRadius: 20,
+        flexDirection: 'row',
+        alignContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
-    musicName:{
-        color:'#fff',
-        fontSize:16,
-        fontWeight:600,
+    musicName: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '600',
     },
-    musicDesc:{
-        color:'#fff',
-        fontSize:10,
+    musicDesc: {
+        color: '#fff',
+        fontSize: 12,
     },
-    musicDescBox:{
-        width:'60%',
-        height:30,
-        flexDirection:'row',
-        alignItems:'center',
-        alignContent:'center'
+    mucisDescBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignContent: 'center',
+        marginTop: 5,
+        gap: 5,
     },
-    musicIcon:{
-        tintColor:'#fff',
-        height:18,
-        width:18,
-        
+    musicIcon: {
+        tintColor: '#fff',
+        height: 18,
+        width: 18,
     },
-    playIcon:{
-        left:15,
-        bottom:15,
-        backgroundColor:'#fff',
-        alignContent:'center',
-        alignItems:'center',
-        justifyContent:'center',
-        height:35,
-        width:35,
-        borderRadius:20,
+    playBtn: {
+        backgroundColor: '#fff',
+        height: 40,
+        width: 40,
+        alignContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 20,
+        padding: 9,
     },
-    playButton:{
-        left:2,
-        height:'90%',
-        width:'90%',
-    }
+    playIcon: {
+        height: '100%',
+        width: '100%',
+    },
 })
