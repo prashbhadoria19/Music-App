@@ -45,13 +45,19 @@ export function Main({navigation}) {
                     </View>
                 </View>
                 {/* search header end */}
+    
                 {/* heading text start */}
+    <ScrollView nestedScrollEnabled={true} showsVerticalScrollIndicator={false}>
                 <Text style={styles.hdText}>
                     Trending right now...
                 </Text>
                 {/* heading text end */}
                 {/* trending cards start */}
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{flexDirection:'row',gap:15,}}>
+    <View style={{
+                        marginTop: 10,
+                        marginBottom: 15,
+                    }}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row', gap: 15, height: '100%', padding: 10, }}>
                     <View style={styles.card}>
                         <Image source={musicImage} style={styles.cardImg}/>
                         <TouchableOpacity style={styles.dotIcon}>
@@ -83,6 +89,9 @@ export function Main({navigation}) {
                         </View>
                     </View>
                 </ScrollView>
+</View>
+                </ScrollView>
+
                 {/* trending cards end */}
                 {/* <Text style={{fontSize:50,marginLeft:15,color:'#fff',fontWeight:'600',opacity:0.7,bottom:50}}>{number}</Text>
                 {showData &&
