@@ -4,6 +4,8 @@ import { StatusBar } from 'expo-status-bar';
 import { Footer } from '../Components/Footer';
 import * as SplashScreen from 'expo-splash-screen';
 import {useFonts} from 'expo-font';
+import db from '../firebaseConfig';
+import { collection, onSnapshot } from "firebase/firestore";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -11,7 +13,7 @@ SplashScreen.preventAutoHideAsync();
 const menu = require('../assets/icons/menu.png');
 const search = require('../assets/icons/search.png');
 const musicImage = require('../assets/musicImage.jpg');
-const music = require('../assets/icons/music.png');
+const musicIcon = require('../assets/icons/music.png');
 const like = require('../assets/icons/like.png');
 const play = require('../assets/icons/play.png');
 const user = require('../assets/icons/user.png');
@@ -19,6 +21,18 @@ const user = require('../assets/icons/user.png');
 export function Main({navigation}) {
 
     const screen="Main";
+
+    const [musicData,setMusicData] = useState([]);
+
+    useEffect(() => {
+        onSnapshot(collection(db,'musics'), (snapshot) => {
+            setMusicData(snapshot.docs.map(doc => ({...doc.data(), id: doc.id})))
+        })
+    },[]);
+
+    const handleMusicPress = (musicId) => {
+        navigation.navigate('Song',{musicId});
+    }
 
     const [fontsLoaded] = useFonts({
         'Raleway-Bold': require('../assets/fonts/Raleway/static/Raleway-Bold.ttf'),
@@ -54,19 +68,19 @@ export function Main({navigation}) {
             <StatusBar style='light' />
             <View style = {styles.subCont}>
                 {/* search header start*/}
-                <TouchableOpacity onPress={() => navigation.navigate("Search")}>
                     <View style={styles.srchHeader}>
                         <View style = {[styles.hdrItems, {width:'12%'}]}>
                             <Image source={menu} style ={[styles.imgIcons, {padding:10,transform:[{rotate:'180deg'}]}]}/>
                         </View>
-                        <View style = {[styles.hdrItems, {width:'80%',gap:80,}]}>
+                <TouchableOpacity onPress={() => navigation.navigate("Search")}>
+                        <View style = {[styles.hdrItems, {width:'170%',gap:80,}]}>
                             <Image source={search} style ={styles.imgIcons}/>
                             <Text style={styles.srchText}>
                                 Search
                             </Text>
                         </View>
-                    </View>
                 </TouchableOpacity>
+                    </View>
                 {/* search header end */}
     
                 {/* heading text start */}
@@ -83,7 +97,36 @@ export function Main({navigation}) {
                     }}>
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row', gap: 15, height: '100%', padding: 10, }}>
 
-                            <View style={styles.card}>
+                            {
+                                musicData.map((music) =>(
+                                    <View style={styles.card}>
+                                    <Image source={{uri:music.coverImg}} style={styles.cardImg} />
+                                    <TouchableOpacity style={styles.dotIcon}>
+                                        <Text style={styles.dotFont}>...</Text>
+                                    </TouchableOpacity>
+                                    <View style={styles.playBox}>
+                                        <View style={styles.playBoxItem}>
+                                            <View key={music.id}>
+                                                <Text style={styles.musicName}>
+                                                    {music.music}
+                                                </Text>
+                                                <View style={styles.musicDescBox}>
+                                                    <Image source={musicIcon} style={styles.musicIcon} />
+                                                    <Text style={styles.musicDesc}>
+                                                        {music.singer}
+                                                    </Text>
+                                                </View>
+                                            </View>
+                                            <TouchableOpacity style={styles.playBtn}>
+                                                <Image source={play} style={styles.playIcon} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    </View>
+                                ))
+                            }                                
+
+                            {/* <View style={styles.card}>
                                 <Image source={musicImage} style={styles.cardImg} />
                                 <TouchableOpacity style={styles.dotIcon}>
                                     <Text style={styles.dotFont}>...</Text>
@@ -131,32 +174,7 @@ export function Main({navigation}) {
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-                            </View>
-
-                            <View style={styles.card}>
-                                <Image source={musicImage} style={styles.cardImg} />
-                                <TouchableOpacity style={styles.dotIcon}>
-                                    <Text style={styles.dotFont}>...</Text>
-                                </TouchableOpacity>
-                                <View style={styles.playBox}>
-                                    <View style={styles.playBoxItem}>
-                                        <View>
-                                            <Text style={styles.musicName}>
-                                                The Dark Side
-                                            </Text>
-                                            <View style={styles.musicDescBox}>
-                                                <Image source={music} style={styles.musicIcon} />
-                                                <Text style={styles.musicDesc}>
-                                                    Muse - Simulation Theory
-                                                </Text>
-                                            </View>
-                                        </View>
-                                        <TouchableOpacity style={styles.playBtn}>
-                                            <Image source={play} style={styles.playIcon} />
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
+                            </View> */}
 
                         </ScrollView>
                     </View>
@@ -195,7 +213,30 @@ export function Main({navigation}) {
 
                 {/* music card */}
                 <ScrollView>
-                    <View style={styles.musicCard}>
+                    {
+                        musicData.map((music) => (
+
+                            <TouchableOpacity  key={music.id} onPress={() => handleMusicPress(music.id)}>
+                                <View style={styles.musicCard}>
+                                        <Image source={{uri:music.coverImg}} style={styles.imgCard}/>
+                                        <View style={styles.musicDesBox}>
+                                            <Text style={styles.musicNme}>{music.music}</Text>
+                                            <View style={styles.desc}>
+                                                    <Image source={user} style={styles.userImg}/>
+                                                <Text style={{fontSize:12,color:'#fff'}}>
+                                                    {music.singer}
+                                                </Text>
+                                            </View>
+                                        </View>
+                                <TouchableOpacity>
+                                    <Image source={like} style={styles.likeBtn}/>
+                                </TouchableOpacity>
+                                </View>
+                            </TouchableOpacity>
+                        ))
+                    }
+
+                    {/* <View style={styles.musicCard}>
                             <Image source={musicImage} style={styles.imgCard}/>
                             <View style={styles.musicDesBox}>
                                 <Text style={styles.musicNme}>I'm Good(Blue)</Text>
@@ -289,23 +330,7 @@ export function Main({navigation}) {
                             <TouchableOpacity>
                                 <Image source={like} style={styles.likeBtn}/>
                             </TouchableOpacity>
-                    </View>
-
-                    <View style={styles.musicCard}>
-                            <Image source={musicImage} style={styles.imgCard}/>
-                            <View style={styles.musicDesBox}>
-                                <Text style={styles.musicNme}>I'm Good(Blue)</Text>
-                                <View style={styles.desc}>
-                                        <Image source={user} style={styles.userImg}/>
-                                    <Text style={{fontSize:10}}>
-                                        Alan Walker
-                                    </Text>
-                                </View>
-                            </View>
-                            <TouchableOpacity>
-                                <Image source={like} style={styles.likeBtn}/>
-                            </TouchableOpacity>
-                    </View>
+                    </View> */}
 
                 </ScrollView>
             </ScrollView>
@@ -400,7 +425,7 @@ const styles = StyleSheet.create({
     },
     playBoxItem: {
         backgroundColor: 'rgba(42, 82, 190, 0.9)',
-        height: 60,
+        height: 70,
         width: '100%',
         padding: 10,
         borderRadius: 20,
@@ -410,6 +435,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     musicName: {
+        left:30,
+        top:5,
         color: '#fff',
         fontSize: 16,
         fontWeight: '600',
@@ -419,16 +446,16 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     musicDescBox: {
+        width:'72%',
         flexDirection: 'row',
-        alignItems: 'center',
-        alignContent: 'center',
         marginTop: 5,
+        marginRight:15,
         gap: 5,
     },
     musicIcon: {
         tintColor: '#fff',
-        height: 18,
-        width: 18,
+        height: 25,
+        width: 25,
     },
     playBtn: {
         backgroundColor: '#fff',
@@ -471,25 +498,22 @@ const styles = StyleSheet.create({
 
     },
     musicDesBox:{
-        padding:10,
+        width:'60%',
+        marginLeft:19,
     },
     desc:{
         flexDirection:'row',
-        alignContent:'flex-start',
-        alignItems:'flex-start',
-        justifyContent:'flex-start',
-        right:30,
-
     },
     musicNme:{
         color:'#fff',
         fontWeight:600,
         fontSize:20,
-        right:30,
     },
     userImg:{
         width:12,
         height:12,
+        tintColor:'#fff',
+        top:2,
     },
     likeBtn:{
         tintColor:'#fff',

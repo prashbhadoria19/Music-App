@@ -1,15 +1,34 @@
 import React,{useCallback,useState,useEffect} from "react";
-import { Text,StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import { Text,StyleSheet, View, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import {Footer} from '../Components/Footer';
 import * as SplashScreen from 'expo-splash-screen';
 import {useFonts} from 'expo-font';
+import db from '../firebaseConfig';
+import {doc,getDoc} from 'firebase/firestore';
+import {Audio}from 'expo-av';
 
 SplashScreen.preventAutoHideAsync();
 
-export function Song({navigation}){
+export function Song({navigation,route}){
 
     const screen="Song";
+    const {musicId} = route.params;
+    const [currentMusic,setCurrentMusic] = useState({});
+
+    useEffect(() => {
+        const getMusic = async() =>{
+            const docRef = doc(db,'musics',musicId);
+            const docSnap =await getDoc(docRef);
+
+            if(docSnap.exists()){
+                setCurrentMusic(docSnap.data());
+            }else{
+                console.log('No such document!');
+            }
+        };
+        getMusic();
+    },[])
 
     const back = require('../assets/icons/back.png');
     const musImage = require('../assets/musImage.jpeg');
@@ -18,6 +37,28 @@ export function Song({navigation}){
     const shuffle = require('../assets/icons/shuffle.png');
     const repeat = require('../assets/icons/repeat.png');
     const play = require('../assets/icons/play.png');
+
+    const [sound, setSound] = React.useState();
+
+    const playSound = async() => {
+        console.log('Loading Sound');
+        const { sound } = await Audio.Sound.createAsync({
+            uri:currentMusic.musicFile
+        });
+        setSound(sound);
+
+        console.log('Playing Sound');
+        await sound.playAsync();
+    }
+
+    React.useEffect(() => {
+        return sound
+          ? () => {
+              console.log('Unloading Sound');
+              sound.unloadAsync();
+            }
+          : undefined;
+      }, [sound]);
 
     const [fontsLoaded] = useFonts({
         'Raleway-Bold': require('../assets/fonts/Raleway/static/Raleway-Bold.ttf'),
@@ -50,15 +91,15 @@ export function Song({navigation}){
                 
                 <View style={styles.musicCard}>
                     <View style={styles.insideCard}>
-                        <Image source={musicImage} style={styles.insideImage}/>
+                        <Image source={{uri:currentMusic.coverImg}} style={styles.insideImage}/>
                     </View>
                 </View>
 
                 <Text style={styles.musicName}>
-                    Resistance
+                    {currentMusic.music}
                 </Text>
                 <Text style={styles.musicSinger}>
-                    Muse
+                    {currentMusic.singer}
                 </Text>
                 <StatusBar style="light"/>
 
@@ -71,7 +112,7 @@ export function Song({navigation}){
                             <Image source={next} style={{width:33,height:33,transform:[{rotate:'180deg'}],tintColor:'#fff'}}/>
                         </TouchableOpacity>
                         <View style={styles.playButton}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={playSound}>
                                 <Image source={play}/>
                             </TouchableOpacity>
                         </View>
